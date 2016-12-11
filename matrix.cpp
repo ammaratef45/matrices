@@ -4,123 +4,37 @@
 #include <stdlib.h>
 #include <string>
 #include <sstream>
+#include "matrix.h"
 
 using namespace std;
 
 const int MAXSIZE = 100;
 const int MAXMATRICIES = 20;
 
-// Linked List of type T
 template <typename T>
-class link {
-	public:
-	string name;
-	T data;
-	link<T>* next;
-};
-
-template <typename T>
-class list {
-	private:
-	//pointer to first link
-	link<T>* first;
-	public:
-	//no-argument constructor
-	list() {
-		//no first link
-		first = NULL;
-	}
-	//add data item (one link)
-	void additem(T d, string _name);
-	//display all links
-	void display();
-};
-
-// Type of matrix
-enum MatrixType {
-	Identity,
-	Random
-};
-
-// The matrix cass
-class matrix {
-	// Private members
-	private:
-	int row, column; // rows and columns of the matrix
-	float ** mat; // array of array of pointers for the matrix
-	// Public members
-	public:
-	// Constructor makes all values zero
-	matrix(int _row = 2, int _column = 2);
-	// Constructor makes all values initialValue
-	matrix(int _row, int _column, float initialValue);
-	// Constructor makes matrix with specific type
-	matrix(int _row, int _column, MatrixType type);
-	// Row and Column getters
-	int Row();
-	int Column();
-	// printing the matrix
-	void print();
-	// Set value to number
-	void set(int _row, int _column, int value);
-	// Get value
-	float get(int _row, int _column);
-	// Add two matrices
-	matrix operator + (matrix _mat);
-	// Subtract two matrices
-	matrix operator - (matrix _mat);
-	// Compare two matrices
-	bool operator == (matrix _mat);
-	bool operator != (matrix _mat);
-	// Multiply two matrices
-	matrix operator * (matrix _mat);
-	// Boolean checkers
-	bool IsSquare();
-	bool IsIdentity();
-	bool IsIdempotent();
-	bool IsSymmetric();
-	bool IsUpperTriangle();
-	bool IsLowerTriangle();
-	// Fill the matrix with number
-	void fill(float value);
-	// Mul the matrix with number
-	void operator * (float value);
-	// Devide the matrix by number
-	void operator / (float value);
-	// Get max element of the matrix
-	float maxElement();
-	// Get min element of the matrix
-	float minElement();
-	// Get determinant of the matrix
-	float determinant();
-	// Convert matrix to string
-	void toString(string* result);
-};
-
-int main () {
-	/* 
-	 * list<matrix> listMat;
-	string command;
-	cout << ">> ";
-	getline(cin, command);
-	while (command != "exit") {
-		int equalOperator, addOperator, subOperator, mulOperater, divOperator;
-		equalOperator = command.find("=");
-		addOperator = command.find('+');
-		subOperator = command.find('-');
-		mulOperater = command.find('*');
-		divOperator = command.find('/');
-		if (equalOperator != -1 && addOperator == -1 && subOperator == -1 && mulOperater == -1 && divOperator == -1) {
-			string name = command.substr(0, equalOperator);
-			matrix mat(2,2);
-			listMat.additem(mat, name);
-		}
-		cout << ">> ";
-		getline(cin, command);
-	}
-	listMat.display();
-	 * */
+list<T>::list() {
+	//no first link
+	this->first = NULL;
 }
+template <typename T>
+void list<T>::additem(T d, string _name) {
+	link<T>* newlink = new link<T>;
+	newlink -> data = d;
+	newlink -> name = _name;
+	newlink -> next = this->first;
+	this->first = newlink;
+}
+
+template <typename T>
+void list<T>::display() {
+	link<T>* current = this->first;
+	while( current != NULL ) {
+		cout << current -> name << " =\n";
+		current -> data.print();
+		current = current -> next;
+	}
+}
+//**************************************************************//
 
 matrix::matrix(int _row, int _column) {
 	row = _row;
@@ -281,7 +195,7 @@ bool matrix::IsSymmetric() {
 	if(!IsSquare()) return false;
 	for (int i=0; i<row; i++) {
 		for (int j=0; j<column; j++) {
-			if(get(i, j) != get(j, i)) return false; 
+			if(get(i, j) != get(j, i)) return false;
 		}
 	}
 	return true;
@@ -382,24 +296,5 @@ void matrix::toString(string* result) {
 	*result = ss.str();
 }
 
-// ================================================================ //
-template <typename T>
-void list<T>::additem(T d, string _name) {
-	link<T>* newlink = new link<T>;
-	newlink -> data = d;
-	newlink -> name = _name;
-	newlink -> next = first;
-	first = newlink;
-}
-
-template <typename T>
-void list<T>::display() {
-	link<T>* current = first;
-	while( current != NULL ) {
-		cout << current -> name << " =\n";
-		current -> data.print();
-		current = current -> next;
-	}
-}
 
 
